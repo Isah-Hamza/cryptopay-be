@@ -95,4 +95,26 @@ class AuthenticationController extends Controller
         ]);
     }
 
+    
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+
+        if (!Hash::check($request->old_password, $user->password)) 
+           {
+                return response()->json([
+                    'message' => ['Old password incorrect'],
+                ]);
+          }
+          
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password changed successfully',
+        ]);
+
+    }
+
 }

@@ -6,7 +6,18 @@ Accept: application/json
 
 {
     "email": "admin@admin.com",
-    "password": "adminadmin"
+    "password": "adminadmin1"
+}
+
+###
+POST http://127.0.0.1:8000/api/change-password
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 5|seN7PFUtoG6AqivH0YDGiN9es6mhFObxIOAv5L032f556c01
+
+{
+    "old_password": "adminadmin",
+    "new_password": "adminadmin1"
 }
 
 ###
