@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -31,5 +32,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile',[AuthenticationController::class,'getAuthUser']);
     Route::patch('profile',[AuthenticationController::class,'updateProfile']);
     Route::post('change-password',[AuthenticationController::class,'changePassword']);
+
+    Route::resource('transactions', TransactionController::class);
+    Route::get('user-transactions', [TransactionController::class,'getUserTransactions']);
 });
 

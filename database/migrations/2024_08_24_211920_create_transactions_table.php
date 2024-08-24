@@ -17,7 +17,8 @@ return new class extends Migration
             $table->float('amount');
             $table->float('profit')->default(0);
             $table->string('proof');
-            $table->float('status')->default(1); // 1 Pending, 2 Approved, 3 Rejected
+            $table->tinyInteger('status')->default(1); // 1 Pending, 2 Approved, 3 Rejected
+            $table->tinyInteger('computed')->default(0); // 0 false, 1 true
             $table->timestamps();
         });
     }

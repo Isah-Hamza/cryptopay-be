@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -12,7 +15,20 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $trnx = Transaction::paginate(20);
+        return response()->json([
+            'status' => 'success',
+            'data' => $trnx,
+        ]);
+    }
+
+    public function getUserTransactions(Request $request)
+    {
+        $trnx = Transaction::where('user_id',$request->user()->id)->paginate(20);
+        return response()->json([
+            'status' => 'success',
+            'data' => $trnx,
+        ]);
     }
 
     /**
@@ -28,15 +44,35 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedData = $request->validate([
+            'amount' => 'required|numeric',
+            'proof' => 'required|string|max:255', 
+          ]);
+
+       $trnx = Transaction::create([
+            'user_id' => request()->user()->id,
+            'amount' => $validatedData['amount'],
+            'proof' => $validatedData['proof'],
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $trnx,
+        ]);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Transaction $transaction)
+    public function show(Transaction $id)
     {
-        //
+        $trnx = Transaction::find($id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $trnx,
+        ]);
     }
 
     /**
@@ -50,16 +86,57 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, string $id)
     {
-        //
+        $trnx = Transaction::find($id);
+        $user = User::find($trnx->user_id);
+        $user_wallet = Wallet::find($user->wallet_id);
+
+        // $trnx->amount = $request->amount ?? $trnx->amount;
+        $trnx->profit = $request->profit ?? $trnx->profit;
+        $trnx->status = $request->status ?? $trnx->status;
+        $trnx->save();
+        $trnx->refresh();
+
+
+        if($request->profit){
+            $user_trnx = Transaction::where('user_id', $user->id)->get();
+            $total_profit = $user_trnx->sum('profit');
+            $user_wallet->profit = $total_profit;
+            $user_wallet->save();
+            $user_wallet->refresh();
+        }
+
+        if($request->status == '2' && $trnx->computed == 0){
+            $wallet_amount = $user_wallet->amount;
+            $wallet_amount += $trnx->amount;
+            $user_wallet->amount = $wallet_amount;
+
+            $trnx->computed = 1;
+            $user_wallet->save();
+            $trnx->save();
+            
+            $trnx->refresh();
+            $user_wallet->refresh();
+        }
+
+        return response()->json([
+            'status' => 'Success',
+            'transaction' => $trnx,
+            'wallet' => $user_wallet,
+        ]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Request $request,string $id)
     {
-        //
+        Transaction::find($id)->delete();
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Deleted successfully',
+        ]);
     }
 }

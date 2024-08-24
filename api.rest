@@ -35,3 +35,20 @@ Authorization: Bearer 5|seN7PFUtoG6AqivH0YDGiN9es6mhFObxIOAv5L032f556c01
 {
     "name": "New Admin Name",
 }
+
+###
+GET http://127.0.0.1:8000/api/user-transactions
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 7|1yaaHPAo141WMnjmeOlzIgO6MQvhAxJulxZ6Lmcpe0a1bfc1
+
+###
+POST http://127.0.0.1:8000/api/transactions
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 7|1yaaHPAo141WMnjmeOlzIgO6MQvhAxJulxZ6Lmcpe0a1bfc1
+
+{
+    "amount": 1500,
+    "proof": "link-to-the-proof-of-payment.jpg"
+}
