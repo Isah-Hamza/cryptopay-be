@@ -13,7 +13,7 @@ Accept: application/json
 POST http://127.0.0.1:8000/api/change-password
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer 5|seN7PFUtoG6AqivH0YDGiN9es6mhFObxIOAv5L032f556c01
+Authorization: Bearer 7|1yaaHPAo141WMnjmeOlzIgO6MQvhAxJulxZ6Lmcpe0a1bfc1
 
 {
     "old_password": "adminadmin",
