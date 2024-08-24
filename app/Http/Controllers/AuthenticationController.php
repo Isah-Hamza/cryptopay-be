@@ -11,6 +11,25 @@ use Illuminate\Support\Facades\Log;
 
 class AuthenticationController extends Controller
 {
+    public function getAuthUser(Request $request)
+    {
+        $user_id = auth()->user()->id;
+        $user = User::with('wallet')->find($user_id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $user,
+        ]);
+    }
+
+    public function getUserById(Request $request,string $id)
+    {
+        $user = User::with('wallet')->find($id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $user,
+        ]);
+    }
+
     public function login(Request $request)
     {
         $user = User::where('email',  $request->email)->first();

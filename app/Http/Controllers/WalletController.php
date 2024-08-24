@@ -50,9 +50,20 @@ class WalletController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Wallet $wallet)
+    public function update(Request $request, string $wallet_id)
     {
-        //
+        $wallet = Wallet::find($wallet_id);
+        $wallet->amount = $request->amount ?? $wallet->amount;
+        $wallet->profit = $request->profit ?? $wallet->profit;
+        $wallet->usdt_wallet_address = $request->usdt_wallet_address ?? $wallet->profit;
+        $wallet->bitcoin_wallet_address = $request->bitcoin_wallet_address ?? $wallet->profit;
+        $wallet->solanar_wallet_address = $request->solanar_wallet_address ?? $wallet->profit;
+        $wallet->save();
+
+        return response()->json([
+            'message'=>'Wallet information updated successfully',
+            'wallet' => $wallet
+        ]);
     }
 
     /**
