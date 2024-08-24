@@ -30,6 +30,24 @@ class AuthenticationController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = User::find($request->user()->id);
+        Log::info($request);
+
+        $user->name = $request->name ?? $user->name;
+        $user->phone = $request->phone ?? $user->phone;
+        $user->gender = $request->gender ?? $user->gender;
+
+        $user->save();
+        $user->refresh();
+        
+        return response()->json([
+            'message' => 'User updated succesfully',
+            'user' => $user,
+        ]);
+    }
+
     public function login(Request $request)
     {
         $user = User::where('email',  $request->email)->first();
