@@ -2,23 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticationController extends Controller
 {
     public function login(Request $request)
     {
-        dd($request->input());
+        $user = User::where('email',  $request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) 
+           {
+                return response()->json([
+                    'message' => ['Username or password incorrect'],
+                ]);
+            }
+
+        $user->tokens()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User logged in successfully',
+            'token' => $user->createToken('auth_token')->plainTextToken,
+            'user' => $user,
+        ]);
+
     }
 
     public function register(Request $request)
     {
-        $name = $request->name;
-        $gender = $request->gender == 'MALE' ? 1 : 2 ;
-        $email = $request->email;
-        $phone = $request->phone;
-        $raw_password = $request->password;
-        $password = 
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+          ]);
+
+        // DB::transaction(function() use($user,$validatedData) {
+            $new_user = User::create($validatedData);
+            $new_wallet = Wallet::create(['user_id' => $new_user->id]);
+            $new_user->wallet_id = $new_wallet->id;
+            $new_user->save();
+            $new_user->refresh();
+            $user = $new_user;
+        // });
+
+        
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $new_user
+        ]);
     }
 
 }

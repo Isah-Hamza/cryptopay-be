@@ -1,0 +1,13 @@
+### Login Service
+@name="Isah Hamza"
+@email="admin@admin.com"
+@phone="07065786031"
+@password="test"
+POST http://127.0.0.1:8000/api/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "admin@admin.com",
+    "password": "adminadmin"
+}
