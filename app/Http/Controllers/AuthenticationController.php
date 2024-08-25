@@ -38,6 +38,7 @@ class AuthenticationController extends Controller
         $user->name = $request->name ?? $user->name;
         $user->phone = $request->phone ?? $user->phone;
         $user->gender = $request->gender ?? $user->gender;
+        $user->address = $request->address ?? $user->address;
 
         $user->save();
         $user->refresh();
