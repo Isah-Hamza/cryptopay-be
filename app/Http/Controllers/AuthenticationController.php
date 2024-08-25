@@ -96,7 +96,6 @@ class AuthenticationController extends Controller
             'user' => $new_user
         ]);
     }
-
     
     public function changePassword(Request $request)
     {

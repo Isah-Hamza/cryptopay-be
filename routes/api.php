@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -35,5 +36,6 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::resource('transactions', TransactionController::class);
     Route::get('user-transactions', [TransactionController::class,'getUserTransactions']);
+    Route::patch('wallet/{wallet_id}',[WalletController::class,'update']);
 });
 
