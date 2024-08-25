@@ -54,8 +54,9 @@ class AuthenticationController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) 
            {
                 return response()->json([
-                    'message' => ['Username or password incorrect'],
-                ]);
+                    'error' => 'Username or password incorrect',
+                ],401);
+
             }
 
         $user->tokens()->delete();
@@ -106,7 +107,7 @@ class AuthenticationController extends Controller
                     'message' => ['Old password incorrect'],
                 ]);
           }
-          
+
         $user->password = Hash::make($request->new_password);
         $user->save();
 
