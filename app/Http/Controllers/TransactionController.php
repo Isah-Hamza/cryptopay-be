@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $trnx = Transaction::paginate(20);
+        $trnx = Transaction::with('user')->paginate(20);
         return response()->json([
             'status' => 'success',
             'data' => $trnx,
@@ -25,6 +25,15 @@ class TransactionController extends Controller
     public function getUserTransactions(Request $request)
     {
         $trnx = Transaction::where('user_id',$request->user()->id)->paginate(20);
+        return response()->json([
+            'status' => 'success',
+            'data' => $trnx,
+        ]);
+    }
+
+    public function getTransactionsByUserId(Request $request,string $id)
+    {
+        $trnx = Transaction::where('user_id',$id)->paginate(20);
         return response()->json([
             'status' => 'success',
             'data' => $trnx,

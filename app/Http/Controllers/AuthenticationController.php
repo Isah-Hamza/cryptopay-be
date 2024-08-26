@@ -21,6 +21,16 @@ class AuthenticationController extends Controller
         ]);
     }
 
+
+    public function getUsers(Request $request)
+    {
+        $users = User::with('wallet')->paginate(50);
+        return response()->json([
+            'status' => 'success',
+            'data' => $users,
+        ]);
+    }
+
     public function getUserById(Request $request,string $id)
     {
         $user = User::with('wallet')->find($id);
@@ -104,8 +114,8 @@ class AuthenticationController extends Controller
         if (!Hash::check($request->old_password, $user->password)) 
            {
                 return response()->json([
-                    'message' => ['Old password incorrect'],
-                ]);
+                    'message' => 'Old password incorrect',
+                ],400);
           }
 
         $user->password = Hash::make($request->new_password);

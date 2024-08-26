@@ -33,9 +33,14 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile',[AuthenticationController::class,'getAuthUser']);
     Route::patch('profile',[AuthenticationController::class,'updateProfile']);
     Route::post('change-password',[AuthenticationController::class,'changePassword']);
-
+    
     Route::resource('transactions', TransactionController::class);
     Route::get('user-transactions', [TransactionController::class,'getUserTransactions']);
+    Route::get('transactions-by-user-id/{id}', [TransactionController::class,'getTransactionsByUserId']);
     Route::patch('wallet/{wallet_id}',[WalletController::class,'update']);
+    
+    Route::get('users',[AuthenticationController::class,'getUsers']);
+    Route::get('users/{id}',[AuthenticationController::class,'getUserById']);
+
 });
 
