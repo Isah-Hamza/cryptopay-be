@@ -129,6 +129,20 @@ class TransactionController extends Controller
             $user_wallet->refresh();
         }
 
+        if($request->status == '3' && $trnx->computed == 1){
+            // dd('here');
+            $wallet_amount = $user_wallet->amount;
+            $wallet_amount -= $trnx->amount;
+            $user_wallet->amount = $wallet_amount;
+
+            $trnx->computed = 0;
+            $user_wallet->save();
+            $trnx->save();
+            
+            $trnx->refresh();
+            $user_wallet->refresh();
+        }
+
         return response()->json([
             'status' => 'Success',
             'transaction' => $trnx,
