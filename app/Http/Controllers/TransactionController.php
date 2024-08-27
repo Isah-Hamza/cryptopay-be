@@ -135,6 +135,10 @@ class TransactionController extends Controller
             $wallet_amount -= $trnx->amount;
             $user_wallet->amount = $wallet_amount;
 
+            $trnx_profit = $trnx->profit;
+            $user_wallet->profit -= $trnx_profit;
+            $trnx->profit = 0;
+
             $trnx->computed = 0;
             $user_wallet->save();
             $trnx->save();

@@ -43,6 +43,12 @@ Accept: application/json
 Authorization: Bearer 7|1yaaHPAo141WMnjmeOlzIgO6MQvhAxJulxZ6Lmcpe0a1bfc1
 
 ###
+GET http://127.0.0.1:8000/api/overview
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 36|KK6NoWPg5vmllCIV8rXPMSwsTnfUfim6LWe4Vl21a9d10f9d
+
+###
 POST http://127.0.0.1:8000/api/transactions
 Content-Type: application/json
 Accept: application/json

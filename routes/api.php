@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('user-transactions', [TransactionController::class,'getUserTransactions']);
     Route::get('transactions-by-user-id/{id}', [TransactionController::class,'getTransactionsByUserId']);
     Route::patch('wallet/{wallet_id}',[WalletController::class,'update']);
+    Route::get('overview',[WalletController::class,'overview']);
     
     Route::get('users',[AuthenticationController::class,'getUsers']);
     Route::get('users/{id}',[AuthenticationController::class,'getUserById']);

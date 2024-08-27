@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 
@@ -13,6 +15,26 @@ class WalletController extends Controller
     public function index()
     {
         //
+    }
+
+    public function overview()
+    {
+        $tt = Transaction::count();
+        $tw = 0;
+        $twf = Wallet::sum('amount');
+        $tu = User::count();
+        $twp = Wallet::sum('profit');
+
+        $lt = Transaction::with('user')->orderBy('created_at','DESC')->limit(3)->get();
+
+        return response()->json([
+            'total_transaction' => $tt,
+            'total_withdrawal' => $tw,
+            'total_users' => $tu,
+            'total_wallet_fund' => $twf,
+            'total_wallet_profit' => $twp,
+            'latest_transactions' => $lt,
+        ]);
     }
 
     /**
