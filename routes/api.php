@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\KycController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
@@ -42,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function(){
     
     Route::get('users',[AuthenticationController::class,'getUsers']);
     Route::get('users/{id}',[AuthenticationController::class,'getUserById']);
+
+    Route::resource('kyc', KycController::class);
 
 });
 
