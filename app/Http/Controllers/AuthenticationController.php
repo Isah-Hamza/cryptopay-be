@@ -14,7 +14,7 @@ class AuthenticationController extends Controller
     public function getAuthUser(Request $request)
     {
         $user_id = auth()->user()->id;
-        $user = User::with('wallet')->find($user_id);
+        $user = User::with('wallet','kyc')->find($user_id);
         return response()->json([
             'status' => 'success',
             'data' => $user,

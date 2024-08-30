@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kyc;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class KycController extends Controller
 {
@@ -28,7 +30,31 @@ class KycController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd('hello');
+        // dd($request->user());
+        $user = User::find($request->user()->id);
+
+        if($user->email != $request->email){
+            return response()->json(['error'=>"The supplied email is different from your login email"],401);
+        }
+        if($user->phone != $request->phone){
+            return response()->json(['error'=>"The supplied phone number is different from your user phone number"],401);
+        }
+
+        if(!Hash::check($request->password, $user->password)){
+            return response()->json(['error'=>"Incorrect login password supplied. Please check again."],401);
+        }
+
+        Kyc::updateOrCreate([
+            'user_id' => $user->id,
+        ],[
+            'user_id' => $user->id,
+            'means_of_identification' => $request->means_of_identification,
+            'identification_number' => $request->identification_number,
+            'status' => 1,
+        ]);
+
+        return response()->json(['message' => 'KYC status updated successfully']);
     }
 
     /**
