@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrationMail;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
 {
@@ -98,6 +100,15 @@ class AuthenticationController extends Controller
             $new_user->save();
             $new_user->refresh();
             $user = $new_user;
+
+            $details = [
+                'title' => 'Success',
+                'content' => 'This is an email testing using Laravel-Brevo',
+            ];
+
+            Mail::to('hamzolium@gmail.com')->send(new RegistrationMail($details));
+            // Mail::to($new_user->email)->send(new RegistrationMail($details));
+
         // });
 
         
