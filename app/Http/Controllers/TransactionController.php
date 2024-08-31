@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WalletFundingMail;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -64,6 +66,14 @@ class TransactionController extends Controller
             'amount' => $validatedData['amount'],
             'proof' => $validatedData['proof'],
         ]);
+
+        $data = [
+            'name' => request()->user()->name,
+            'amount' => $request->amount,
+        ];
+
+        Mail::to(request()->user()->email)->send(new WalletFundingMail($data));
+
 
         return response()->json([
             'status' => 'success',

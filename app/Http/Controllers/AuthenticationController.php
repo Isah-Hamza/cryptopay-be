@@ -101,12 +101,7 @@ class AuthenticationController extends Controller
             $new_user->refresh();
             $user = $new_user;
 
-            $details = [
-                'title' => 'Success',
-                'content' => 'This is an email testing using Laravel-Brevo',
-            ];
-
-            Mail::to('hamzolium@gmail.com')->send(new RegistrationMail($details));
+            Mail::to($new_user->email)->send(new RegistrationMail($new_user));
             // Mail::to($new_user->email)->send(new RegistrationMail($details));
 
         // });

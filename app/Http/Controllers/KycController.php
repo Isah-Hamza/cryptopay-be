@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\KYCSubmittedMail;
 use App\Models\Kyc;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class KycController extends Controller
 {
@@ -45,7 +47,7 @@ class KycController extends Controller
             return response()->json(['error'=>"Incorrect login password supplied. Please check again."],401);
         }
 
-        Kyc::updateOrCreate([
+        $record = Kyc::updateOrCreate([
             'user_id' => $user->id,
         ],[
             'user_id' => $user->id,
@@ -53,6 +55,8 @@ class KycController extends Controller
             'identification_number' => $request->identification_number,
             'status' => 1,
         ]);
+
+        Mail::to($request->email)->send(new KYCSubmittedMail($user));
 
         return response()->json(['message' => 'KYC status updated successfully']);
     }
