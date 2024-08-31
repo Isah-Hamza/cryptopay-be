@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function(){
     
     Route::get('users',[AuthenticationController::class,'getUsers']);
     Route::get('users/{id}',[AuthenticationController::class,'getUserById']);
+    Route::post('send-mail',[AuthenticationController::class,'sendMail']);
 
     Route::resource('kyc', KycController::class);
 

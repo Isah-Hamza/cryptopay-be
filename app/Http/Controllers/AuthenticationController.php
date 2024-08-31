@@ -23,7 +23,6 @@ class AuthenticationController extends Controller
         ]);
     }
 
-
     public function getUsers(Request $request)
     {
         $users = User::with('wallet')->paginate(50);
@@ -132,6 +131,11 @@ class AuthenticationController extends Controller
             'message' => 'Password changed successfully',
         ]);
 
+    }
+
+    public function sendMail(Request $request)
+    {
+        return $request->input();
     }
 
 }
