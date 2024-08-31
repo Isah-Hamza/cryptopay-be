@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CustomMail;
 use App\Mail\RegistrationMail;
 use App\Models\User;
 use App\Models\Wallet;
@@ -135,7 +136,11 @@ class AuthenticationController extends Controller
 
     public function sendMail(Request $request)
     {
-        return $request->input();
+        Mail::to($request->email)->send(new CustomMail($request));
+
+        return response()->json([
+            'message' => 'Mail sent successfully.'
+        ]);
     }
 
 }
