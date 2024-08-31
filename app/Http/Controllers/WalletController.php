@@ -94,6 +94,20 @@ class WalletController extends Controller
         ]);
     }
 
+    public function getAdminWallet()
+    { 
+
+        $user =  User::with('wallet')->where('role','admin')->first();
+
+        $wallet = Wallet::firstWhere('user_id', $user->id)->only([
+            'bitcoin_wallet_address',
+            'solanar_wallet_address',
+            'ethereum_wallet_address',
+            'usdt_wallet_address',
+        ]);
+        return response()->json(['status' => 'success', 'wallet' => $wallet]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

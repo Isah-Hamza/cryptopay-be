@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('get-platform-wallet',[WalletController::class,'getAdminWallet']);
+
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile',[AuthenticationController::class,'getAuthUser']);
