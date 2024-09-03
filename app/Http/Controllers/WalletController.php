@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
 {
@@ -27,6 +28,30 @@ class WalletController extends Controller
 
         $lt = Transaction::with('user')->orderBy('created_at','DESC')->limit(3)->get();
 
+        // dd(Transaction::where('status',2)->get());
+        $at = Transaction::where('status',2)->get()->count();
+        $pt = Transaction::where('status',1)->get()->count();
+
+        // $monthlyTransactions = DB::table('transactions')
+        // ->selectRaw('DATE_FORMAT(created_at, "%M") as month, COUNT(*) as count')
+        // ->groupBy('month')
+        // ->get()
+        // ->mapWithKeys(function ($item) {
+        //     return [
+        //         $item->month => $item->count,
+        //     ];
+        // });
+
+        // // Fill in missing months with 0
+        // $allMonths = range(1, 12);
+        // foreach ($allMonths as $month) {
+        //     if (!isset($monthlyTransactions[$month])) {
+        //         $monthlyTransactions[$month] = 0;
+        //     }
+        // }
+
+        // return $monthlyTransactions;
+
         return response()->json([
             'total_transaction' => $tt,
             'total_withdrawal' => $tw,
@@ -34,6 +59,8 @@ class WalletController extends Controller
             'total_wallet_fund' => $twf,
             'total_wallet_profit' => $twp,
             'latest_transactions' => $lt,
+            'approved_transactions' =>$at,
+            'pending_transactions' =>$pt,
         ]);
     }
 

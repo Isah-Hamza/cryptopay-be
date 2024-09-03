@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id'); 
             $table->string('means_of_identification');
             $table->string('identification_number');
-            $table->tinyInteger('status'); // 1->Pending 2->Verified 3->Not Verified
+            $table->tinyInteger('status'); // 1->Pending 2->Approved 3->Not Approved
             $table->timestamps();
         });
     }

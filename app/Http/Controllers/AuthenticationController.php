@@ -17,7 +17,9 @@ class AuthenticationController extends Controller
     public function getAuthUser(Request $request)
     {
         $user_id = auth()->user()->id;
-        $user = User::with('wallet','kyc')->find($user_id);
+        $user = User::with('wallet','kyc','transactions')->find($user_id);
+        $user->total_transactions = $user->transactions->count();
+
         return response()->json([
             'status' => 'success',
             'data' => $user,
@@ -35,7 +37,7 @@ class AuthenticationController extends Controller
 
     public function getUserById(Request $request,string $id)
     {
-        $user = User::with('wallet')->find($id);
+        $user = User::with('wallet','kyc')->find($id);
         return response()->json([
             'status' => 'success',
             'data' => $user,

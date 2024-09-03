@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ApproveKyc;
 use App\Mail\KYCSubmittedMail;
 use App\Models\Kyc;
 use App\Models\User;
@@ -32,8 +33,7 @@ class KycController extends Controller
      */
     public function store(Request $request)
     {
-        // dd('hello');
-        // dd($request->user());
+
         $user = User::find($request->user()->id);
 
         if($user->email != $request->email){
@@ -47,6 +47,8 @@ class KycController extends Controller
             return response()->json(['error'=>"Incorrect login password supplied. Please check again."],401);
         }
 
+        // return ($this);
+
         $record = Kyc::updateOrCreate([
             'user_id' => $user->id,
         ],[
@@ -57,6 +59,9 @@ class KycController extends Controller
         ]);
 
         Mail::to($request->email)->send(new KYCSubmittedMail($user));
+        ApproveKyc::dispatch($record);
+        // ->delay(now()->addMinute(1));
+
 
         return response()->json(['message' => 'KYC status updated successfully']);
     }
