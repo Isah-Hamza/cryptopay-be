@@ -58,18 +58,21 @@ class TransactionController extends Controller
 
         $validatedData = $request->validate([
             'amount' => 'required|numeric',
-            'proof' => 'required|string|max:255', 
+            'type' => 'numeric',
+            'proof' => 'required_if:type,1|string|max:255', 
           ]);
 
        $trnx = Transaction::create([
             'user_id' => request()->user()->id,
             'amount' => $validatedData['amount'],
-            'proof' => $validatedData['proof'],
+            'proof' => $validatedData['proof'] ?? null,
+            'transaction_type' => $validatedData['type'] ?? 1,
         ]);
-
+        
         $data = [
             'name' => request()->user()->name,
             'amount' => $request->amount,
+            'type' => $trnx->transaction_type,
         ];
 
         Mail::to(request()->user()->email)->send(new WalletFundingMail($data));

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->float('amount');
             $table->float('profit')->default(0);
-            $table->string('proof');
+            $table->string('proof')->nullable();
+            $table->tinyInteger('transaction_type')->default(1); // 1 is Funding, 2 is Withdrawal
             $table->tinyInteger('status')->default(1); // 1 Pending, 2 Approved, 3 Rejected
             $table->tinyInteger('computed')->default(0); // 0 false, 1 true
             $table->timestamps();
